@@ -14,6 +14,8 @@ When you deploy a new version of your application, you must replace the previous
 
 ### Example Graceful Shutdown
 ```js
+const server = app.listen(port)
+
 process.on('SIGTERM', () => {
   debug('SIGTERM signal received: closing HTTP server')
   server.close(() => {
@@ -111,7 +113,6 @@ app.listen(3000, () => {
 })
 
 // You can signal that the service is not ready using `lightship.signalNotReady()`.
-
 ```
 
 [Lightship documentation](https://github.com/gajus/lightship) provides examples of the corresponding [Kubernetes configuration](https://github.com/gajus/lightship#lightship-usage-kubernetes-container-probe-configuration) and a complete example of integration with [Express.js](https://github.com/gajus/lightship#using-with-expressjs).
@@ -150,7 +151,31 @@ app.get('/', (req, res) => {
 setTimeout(() => {
   httpTerminator.terminate()
 }, 1000)
-
 ```
 
 [http-terminator documentation](https://github.com/gajus/http-terminator) provides API documentation and comparison to other existing third-party solutions.
+
+### express-actuator
+
+[express-actuator](https://github.com/rcruzper/express-actuator) is a middleware to add endpoints to help you monitor and manage applications.
+
+Install express-actuator as follows:
+
+```sh
+npm install --save express-actuator
+```
+
+Basic template that illustrates using express-actuator:
+
+```js
+const express = require('express')
+const actuator = require('express-actuator')
+
+const app = express()
+
+app.use(actuator())
+
+app.listen(3000)
+```
+
+The [express-actuator documentation](https://github.com/rcruzper/express-actuator) provides different options for customization.
